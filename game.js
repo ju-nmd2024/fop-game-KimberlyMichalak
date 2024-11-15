@@ -1,14 +1,18 @@
 function setup() {
-  createCanvas(800, 600);
+  createCanvas(700, 600);
 }
 //position variables
-let characterX= 250;
-let characterY= 50;
+let characterX = 250;
+let characterY = 50;
 //game logic variables
 let velocityY = 0.2;
 let acceleration = 0.2;
 // game state variable
 let gameState = true;
+// automatic slides
+let state = "start";
+let gameTimer = 0;
+
 // function that draws the background
 function gameBackground() {
   background(10, 24, 66);
@@ -25,28 +29,28 @@ function cloud(x, y, s) {
   ellipse(x + 220 * s, y + 260 * s, 100 * s, 80 * s);
 }
 // function that drwas the rainbow with the cloud
-function rainbow(x,y,s) {
-noStroke();
-fill(255, 0, 0);
-rect(x + 40 * s, y + 400 * s, 20 * s, 70 * s);
-fill(255, 127, 0);
-rect(x + 60 * s, y + 400 * s, 20 * s, 70 * s);
-fill(255, 255, 0);
-rect(x + 80 * s, y + 400 * s, 20 * s, 70 * s);
-fill(0, 255, 0);
-rect(x + 100 * s, y + 400 * s, 20 * s, 70 * s);
-fill(0, 100, 255);
-rect(x + 120 * s, y + 400 * s, 20 * s, 70 * s);
-fill(139, 0, 255);
-rect(x + 140 * s, y + 400 * s, 20 * s, 70 * s);
- fill(255, 255, 255);
- ellipse(x + 135 * s, y + 480 * s, 80 * s, 30);
- ellipse(x + 70 * s, y + 480 * s, 80 * s, 30);
- ellipse(x + 50 * s, y + 500 * s, 80 * s, 30);
- ellipse(x + 70 * s, y + 510 * s, 80 * s, 30);
- ellipse(x + 130 * s, y + 510 * s, 80 * s, 30);
- ellipse(x + 155 * s, y + 500 * s, 80 * s, 30);
- ellipse(x + 135 * s, y + 500 * s, 80 * s, 30);
+function rainbow(x, y, s) {
+  noStroke();
+  fill(255, 0, 0);
+  rect(x + 40 * s, y + 400 * s, 20 * s, 70 * s);
+  fill(255, 127, 0);
+  rect(x + 60 * s, y + 400 * s, 20 * s, 70 * s);
+  fill(255, 255, 0);
+  rect(x + 80 * s, y + 400 * s, 20 * s, 70 * s);
+  fill(0, 255, 0);
+  rect(x + 100 * s, y + 400 * s, 20 * s, 70 * s);
+  fill(0, 100, 255);
+  rect(x + 120 * s, y + 400 * s, 20 * s, 70 * s);
+  fill(139, 0, 255);
+  rect(x + 140 * s, y + 400 * s, 20 * s, 70 * s);
+  fill(255, 255, 255);
+  ellipse(x + 135 * s, y + 480 * s, 80 * s, 30);
+  ellipse(x + 70 * s, y + 480 * s, 80 * s, 30);
+  ellipse(x + 50 * s, y + 500 * s, 80 * s, 30);
+  ellipse(x + 70 * s, y + 510 * s, 80 * s, 30);
+  ellipse(x + 130 * s, y + 510 * s, 80 * s, 30);
+  ellipse(x + 155 * s, y + 500 * s, 80 * s, 30);
+  ellipse(x + 135 * s, y + 500 * s, 80 * s, 30);
 }
 // function that draws the character
 function character(x, y, s) {
@@ -148,47 +152,121 @@ function landingCloud(x, y, s) {
   ellipse(x + 160 * s, y + 240 * s, 100 * s, 80 * s);
   ellipse(x + 220 * s, y + 260 * s, 100 * s, 80 * s);
 }
+// different screens
+function startScreen() {
+  background(10, 24, 66);
+  //stars
+  fill(255, 255, 204);
+  ellipse(350, 50, 100);
+  fill(10, 24, 66);
+  ellipse(310, 0, 80, 100);
+  ellipse(388, 0, 80, 100);
+  ellipse(310, 90, 80, 100);
+  ellipse(388, 90, 80, 100);
+  fill(255, 255, 204);
+  ellipse(78, 500, 100);
+  fill(10, 24, 66);
+  ellipse(40, 460, 80, 100);
+  ellipse(118, 460, 80, 100);
+  ellipse(40, 540, 80, 100);
+  ellipse(118, 540, 80, 100);
+  fill(255, 255, 204);
+  ellipse(490, 510, 130);
+  fill(10, 24, 66);
+  ellipse(440, 455, 100);
+  ellipse(540, 455, 100);
+  ellipse(440, 550, 100);
+  ellipse(540, 550, 100);
+  ellipse(490, 570, 40);
+  ellipse(490, 440, 40);
+
+  //cloud
+  fill(245, 162, 173);
+  noStroke();
+  ellipse(340, 400, 200, 180);
+  ellipse(460, 320, 200, 180);
+  ellipse(420, 220, 200, 180);
+  ellipse(260, 200, 200, 180);
+  ellipse(200, 370, 200, 180);
+  ellipse(150, 280, 200, 180);
+  ellipse(300, 300, 300, 180);
+  //Text
+  fill(255, 255, 255);
+  textSize(60);
+  text("START GAME", 110, 315);
+  //moon
+  fill(255, 255, 204);
+  ellipse(100, 100, 100);
+  fill(10, 24, 66);
+  ellipse(150, 100, 100);
+  fill(245, 245, 175);
+  ellipse(95, 135, 15);
+  ellipse(76, 125, 7);
+  ellipse(90, 90, 15);
+}
+function gameScreen() {
+  background(10, 24, 66);
+}
+function resultScreen() {
+  background(10, 24, 66);
+  fill(245, 162, 173);
+  noStroke();
+  ellipse(340, 400, 200, 180);
+  ellipse(460, 320, 200, 180);
+  ellipse(420, 220, 200, 180);
+  ellipse(260, 200, 200, 180);
+  ellipse(200, 370, 200, 180);
+  ellipse(150, 280, 200, 180);
+  ellipse(300, 300, 300, 180);
+}
 
 function draw() {
-  gameBackground();
-  cloud(-80, -60, 0.5);
-  cloud(90, 0, 0.5);
-  cloud(260, -60, 0.5);
-  cloud(90, 0, 0.5);
-  cloud(450, 0, 0.5);
-  cloud(-120, 120, 0.5);
-  cloud(330, 120, 0.5);
-  cloud(90, 190, 0.5);
-  cloud(500, 190, 0.5);
-  cloud(90, 190, 0.5);
-  cloud(-150, 280, 0.5);
-  cloud(300, 260, 0.5);
-  cloud(80, 340, 0.5);
-  cloud(420, 400, 0.5);
-  cloud(-90, 430, 0.5);
-  landingCloud(-50, 260, 1.5); 
+  if (state === "start") {
+    startScreen();
+  } else if (state === "game") {
+    gameScreen();
+    gameBackground();
+    cloud(-80, -60, 0.5);
+    cloud(90, 0, 0.5);
+    cloud(260, -60, 0.5);
+    cloud(90, 0, 0.5);
+    cloud(450, 0, 0.5);
+    cloud(-120, 120, 0.5);
+    cloud(330, 120, 0.5);
+    cloud(90, 190, 0.5);
+    cloud(500, 190, 0.5);
+    cloud(90, 190, 0.5);
+    cloud(-150, 280, 0.5);
+    cloud(300, 260, 0.5);
+    cloud(80, 340, 0.5);
+    cloud(420, 400, 0.5);
+    cloud(-90, 430, 0.5);
+    landingCloud(-50, 260, 1.5);
+    // making the rainbow appear when pressing the spacebar
+    if (keyIsDown(32)) {
+      rainbow(characterX, characterY, 0.4);
+    }
+    character(characterX, characterY, 0.4);
 
-  // making the rainbow appear when pressing the spacebar
-if(keyIsDown(32)) {
-  rainbow(characterX,characterY,0.4);
-}
-character(characterX, characterY,0.4);             
+    gameTimer = gameTimer + 1;
+    if (gameTimer >= 400) {
+      gameTimer = 0;
+      state = "result";
+    }
+  } else if (state === "result") {
+    resultScreen();
+  }
 
-  if (gameState === true ){ 
+  if (gameState === true) {
     characterY = characterY + velocityY;
     velocityY = velocityY + acceleration;
 
     //decrasing the velocity
-    if (mouseIsPressed) { 
+    if (mouseIsPressed) {
       velocityY = velocityY - 0.7;
     }
 
-    if (characterY > 400) {
-      gameState = false;
-      console.log("gameover");
-    }
-    
-    //Key Movement controls 
+    //Key Movement controls
     if (keyIsDown(32)) {
       velocityY = velocityY - 0.7;
     }
@@ -200,10 +278,22 @@ character(characterX, characterY,0.4);
     if (keyIsDown(37)) {
       characterX = characterX - 5;
     }
+  }
+  if (characterY > 400 && gameState === true) {
+    if (velocityY > 5) {
+      gameState = false;
+      console.log("GAME OVER :(");
+    } else {
+      gameState = false;
+      console.log("YOU DID IT! :)");
+    }
+  }
+}
 
-  } 
-    
-}                
-     
-            
-                                                            
+function mouseClicked() {
+  if (state === "start") {
+    state = "game";
+  } else if (state === "result") {
+    state = "game";
+  }
+}
