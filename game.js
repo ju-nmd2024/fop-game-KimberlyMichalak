@@ -13,7 +13,13 @@ let gameState = true;
 let state = "start";
 let gameTimer = 0;
 
-// function that draws the background
+// function to reset the game 
+function resetGame(){
+  characterY = 100;
+  velocityY = 0.2;
+  gameState = true;
+}
+// function that draws the background 
 function gameBackground() {
   background(10, 24, 66);
 }
@@ -218,6 +224,24 @@ function resultScreen() {
   ellipse(200, 370, 200, 180);
   ellipse(150, 280, 200, 180);
   ellipse(300, 300, 300, 180);
+  fill(255, 255, 255);
+  textSize(60);
+  text("YOU DID IT :)", 110, 315);
+}
+function gameoverScreen() {
+  background(128, 128, 128);
+  fill(64, 64, 64);
+  noStroke();
+  ellipse(340, 400, 200, 180);
+  ellipse(460, 320, 200, 180);
+  ellipse(420, 220, 200, 180);
+  ellipse(260, 200, 200, 180);
+  ellipse(200, 370, 200, 180);
+  ellipse(150, 280, 200, 180);
+  ellipse(300, 300, 300, 180);
+  fill(255, 255, 255);
+  textSize(60);
+  text("GAME OVER :(", 110, 315);
 }
 
 function draw() {
@@ -250,12 +274,15 @@ function draw() {
 
     gameTimer = gameTimer + 1;
     if (gameTimer >= 400) {
-      gameTimer = 0;
-      state = "result";
+    gameTimer = 0;
+    state = "result";
     }
   } else if (state === "result") {
     resultScreen();
+  } else if (state === "gameover"){
+    gameoverScreen();
   }
+
 
   if (gameState === true) {
     characterY = characterY + velocityY;
@@ -279,21 +306,36 @@ function draw() {
       characterX = characterX - 5;
     }
   }
+  // platform landing
   if (characterY > 400 && gameState === true) {
-    if (velocityY > 5) {
+    if(characterX <= 120 && characterX >= 600) {  
       gameState = false;
-      console.log("GAME OVER :(");
+      colsole.log ( "GAME OVER :( you did not land on the cloud!");
+      state = "gameover";
+     } else if(velocityY > 5) {
+      gameState = false;
+      console.log("GAME OVER :( you were to fast!");
+      state = "gameover";
     } else {
       gameState = false;
       console.log("YOU DID IT! :)");
+      state = "result";
     }
   }
 }
 
 function mouseClicked() {
   if (state === "start") {
+    characterX = 250;
+    characterY = 50;
+    velocityY = 5;
     state = "game";
-  } else if (state === "result") {
-    state = "game";
+    gameState = true;
+  } else if (state === "result"|| "gameover") {
+    state = "start";
+    resetGame();
   }
-}
+}  
+    
+
+                          
