@@ -1,5 +1,5 @@
 function setup() {
-  createCanvas(700, 600);
+  createCanvas(600, 600);
 }
 //position variables
 let characterX = 250;
@@ -8,18 +8,17 @@ let characterY = 50;
 let velocityY = 0.2;
 let acceleration = 0.2;
 // game state variable
-let gameState = true;
+let gameState = false;
 // automatic slides
 let state = "start";
-let gameTimer = 0;
 
-// function to reset the game 
-function resetGame(){
+// function to reset the game
+function resetGame() {
   characterY = 100;
   velocityY = 0.2;
   gameState = true;
 }
-// function that draws the background 
+// function that draws the background
 function gameBackground() {
   background(10, 24, 66);
 }
@@ -200,6 +199,14 @@ function startScreen() {
   fill(255, 255, 255);
   textSize(60);
   text("START GAME", 110, 315);
+  fill(255, 255, 255);
+  textSize(15);
+  text(
+    "Make the unicorn land on the cotton-candy coloured cloud softly.",
+    110,
+    350
+  );
+
   //moon
   fill(255, 255, 204);
   ellipse(100, 100, 100);
@@ -212,6 +219,27 @@ function startScreen() {
 }
 function gameScreen() {
   background(10, 24, 66);
+  gameBackground();
+  cloud(-80, -60, 0.5);
+  cloud(90, 0, 0.5);
+  cloud(260, -60, 0.5);
+  cloud(90, 0, 0.5);
+  cloud(450, 0, 0.5);
+  cloud(-120, 120, 0.5);
+  cloud(330, 120, 0.5);
+  cloud(90, 190, 0.5);
+  cloud(500, 190, 0.5);
+  cloud(90, 190, 0.5);
+  cloud(-150, 280, 0.5);
+  cloud(300, 260, 0.5);
+  cloud(80, 340, 0.5);
+  cloud(420, 400, 0.5);
+  cloud(-90, 430, 0.5);
+  landingCloud(-50, 260, 1.5);
+  // making the rainbow appear when pressing the spacebar
+  if (keyIsDown(32)) {
+    rainbow(characterX, characterY, 0.4);
+  }
 }
 function resultScreen() {
   background(10, 24, 66);
@@ -227,6 +255,8 @@ function resultScreen() {
   fill(255, 255, 255);
   textSize(60);
   text("YOU DID IT :)", 110, 315);
+  textSize(15);
+  text("click to restart", 250, 350);
 }
 function gameoverScreen() {
   background(128, 128, 128);
@@ -242,6 +272,8 @@ function gameoverScreen() {
   fill(255, 255, 255);
   textSize(60);
   text("GAME OVER :(", 110, 315);
+  textSize(15);
+  text("click to restart", 250, 350);
 }
 
 function draw() {
@@ -249,40 +281,12 @@ function draw() {
     startScreen();
   } else if (state === "game") {
     gameScreen();
-    gameBackground();
-    cloud(-80, -60, 0.5);
-    cloud(90, 0, 0.5);
-    cloud(260, -60, 0.5);
-    cloud(90, 0, 0.5);
-    cloud(450, 0, 0.5);
-    cloud(-120, 120, 0.5);
-    cloud(330, 120, 0.5);
-    cloud(90, 190, 0.5);
-    cloud(500, 190, 0.5);
-    cloud(90, 190, 0.5);
-    cloud(-150, 280, 0.5);
-    cloud(300, 260, 0.5);
-    cloud(80, 340, 0.5);
-    cloud(420, 400, 0.5);
-    cloud(-90, 430, 0.5);
-    landingCloud(-50, 260, 1.5);
-    // making the rainbow appear when pressing the spacebar
-    if (keyIsDown(32)) {
-      rainbow(characterX, characterY, 0.4);
-    }
     character(characterX, characterY, 0.4);
-
-    gameTimer = gameTimer + 1;
-    if (gameTimer >= 400) {
-    gameTimer = 0;
-    state = "result";
-    }
   } else if (state === "result") {
     resultScreen();
-  } else if (state === "gameover"){
+  } else if (state === "gameover") {
     gameoverScreen();
   }
-
 
   if (gameState === true) {
     characterY = characterY + velocityY;
@@ -292,7 +296,6 @@ function draw() {
     if (mouseIsPressed) {
       velocityY = velocityY - 0.7;
     }
-
     //Key Movement controls
     if (keyIsDown(32)) {
       velocityY = velocityY - 0.7;
@@ -301,18 +304,18 @@ function draw() {
     if (keyIsDown(39)) {
       characterX = characterX + 5;
     }
-    // arrow left movement
+    //arrow left movement
     if (keyIsDown(37)) {
       characterX = characterX - 5;
     }
   }
   // platform landing
-  if (characterY > 400 && gameState === true) {
-    if(characterX <= 120 && characterX >= 600) {  
+  if (characterY >= 400 && characterY <= 500 && gameState === true) {
+    if (characterX <= 120 || characterX >= 400) {
       gameState = false;
-      colsole.log ( "GAME OVER :( you did not land on the cloud!");
+      console.log("GAME OVER :( you did not land on the cloud!");
       state = "gameover";
-     } else if(velocityY > 5) {
+    } else if (velocityY >= 5) {
       gameState = false;
       console.log("GAME OVER :( you were to fast!");
       state = "gameover";
@@ -322,20 +325,19 @@ function draw() {
       state = "result";
     }
   }
-}
+} 
 
 function mouseClicked() {
   if (state === "start") {
     characterX = 250;
     characterY = 50;
-    velocityY = 5;
+    velocityY = 0.2;
     state = "game";
     gameState = true;
-  } else if (state === "result"|| "gameover") {
-    state = "start";
+  } else if (state === "result" || state === "gameover") {
     resetGame();
+    state = "start";
+    gameState = false;
   }
-}  
-    
-
-                          
+}
+  
